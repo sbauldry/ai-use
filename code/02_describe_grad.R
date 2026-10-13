@@ -80,7 +80,7 @@ write_csv(count(breadth, tasks_any_use, name = "respondents"),
 pal2 <- c(Never = "#E8E8E8", Sometimes = "#9ECAE1", Regularly = "#08519C", `N/A` = "#B8B8B8")
 pal5 <- c(No = "#E8E8E8", Yes = "#08519C", `N/A` = "#B8B8B8")
 
-fig <- function(t, pal, ord, title, subtitle, file, h) {
+fig <- function(t, pal, ord, title, subtitle, file, h, w = 9, base = 11, caption = TRUE, lab = 3) {
   t |>
     mutate(item = factor(item, levels = rev(ord)),
            resp = factor(resp, levels = rev(levels(resp))),
@@ -88,18 +88,18 @@ fig <- function(t, pal, ord, title, subtitle, file, h) {
     ggplot(aes(pct, item, fill = resp)) +
     geom_col(width = 0.75, color = "white", linewidth = 0.3) +
     geom_text(aes(label = label, group = resp, color = resp %in% c("Regularly", "Yes")),
-              position = position_stack(vjust = 0.5), size = 3) +
+              position = position_stack(vjust = 0.5), size = lab) +
     scale_color_manual(values = c(`TRUE` = "white", `FALSE` = "black"), guide = "none") +
     scale_fill_manual(values = pal, breaks = names(pal), name = NULL) +
     scale_x_continuous(expand = expansion(mult = c(0, 0.02)), breaks = seq(0, 100, 25),
                        labels = function(x) paste0(x, "%")) +
     labs(title = title, subtitle = subtitle, x = NULL, y = NULL,
-         caption = "Numbers in bars are respondent counts. Purdue Sociology graduate student survey, fall 2026.") +
-    theme_minimal(base_size = 11) +
+         caption = if (caption) "Numbers in bars are respondent counts. Purdue Sociology graduate student survey, fall 2026." else NULL) +
+    theme_minimal(base_size = base) +
     theme(panel.grid = element_blank(), legend.position = "top",
           legend.justification = "left", plot.title.position = "plot",
           plot.title = element_text(face = "bold"))
-  ggsave(file, width = 9, height = h, dpi = 300, bg = "white")
+  ggsave(file, width = w, height = h, dpi = 300, bg = "white")
 }
 
 rng <- function(x) if (min(x) == max(x)) as.character(min(x)) else paste0(min(x), "-", max(x))
@@ -110,6 +110,14 @@ fig(t2, pal2, w2$item, "AI use in coursework, past year",
 fig(t5, pal5, w5$item, "AI use planned or used for AP / dissertation",
     sprintf("Share of respondents by task (n = %s per item), ordered by number answering yes", n5),
     "output/figures/grad_ap_dissertation_use_by_task.png", 5.5)
+
+# Compact versions for the two-page report (code/03_build_report_grad.R)
+fig(t2, pal2, w2$item, "Figure 1. AI use in coursework, past year",
+    sprintf("n = %s respondents per item; tasks ordered by number reporting any use", n2),
+    "output/figures/grad_coursework_use_by_task_report.png", 3.3, w = 7.6, base = 8.5, caption = FALSE, lab = 2.5)
+fig(t5, pal5, w5$item, "Figure 2. AI use planned or used for AP / dissertation",
+    sprintf("n = %s respondents per item; tasks ordered by number answering yes", n5),
+    "output/figures/grad_ap_dissertation_use_by_task_report.png", 3.0, w = 7.6, base = 8.5, caption = FALSE, lab = 2.5)
 
 print(w2 |> select(item, n_answered, n_Never, n_Sometimes, n_Regularly, `n_N/A`), n = Inf, width = Inf)
 print(w5 |> select(item, n_answered, n_No, n_Yes, `n_N/A`), n = Inf, width = Inf)
