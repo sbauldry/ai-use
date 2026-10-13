@@ -1,0 +1,7 @@
+# Raw Qualtrics exports contain IP addresses and geolocation; keep local only.
+data/raw/
+.DS_Store
+.Rhistory
+.Rproj.user/
+*.Rproj
+.RData
