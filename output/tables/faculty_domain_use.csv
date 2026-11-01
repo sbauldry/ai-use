@@ -1,0 +1,13 @@
+domain,type,n,n_answered,pct
+Research,No,8,26,30.76923076923077
+Research,LLM only,14,26,53.84615384615385
+Research,AI agent only,2,26,7.6923076923076925
+Research,LLM and AI agent,2,26,7.6923076923076925
+Service,No,20,26,76.92307692307692
+Service,LLM only,5,26,19.23076923076923
+Service,AI agent only,0,26,0
+Service,LLM and AI agent,1,26,3.8461538461538463
+Teaching,No,13,26,50
+Teaching,LLM only,10,26,38.46153846153846
+Teaching,AI agent only,1,26,3.8461538461538463
+Teaching,LLM and AI agent,2,26,7.6923076923076925

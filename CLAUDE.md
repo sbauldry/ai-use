@@ -34,6 +34,26 @@ rows 4+ = responses. Value labels are text (e.g., "Never"), not codes.
 Not every respondent answered every item (item n varies, ~13–18); always report the
 denominator and don't treat missing as "No". "N/A" is a substantive answer distinct from missing.
 
+## Faculty survey (n = 26 of 31 invited, ~84% response rate)
+Instrument: `instruments/Faculty_AI_Use.docx`. Qualtrics export in `data/raw/faculty_ai_use_qualtrics_export.csv`
+(renamed from the original download name); responses recorded 2026-10-06 to 2026-10-30.
+- The export has 28 rows; **2 are Qualtrics "Survey Preview" test rows** (`Status` = "Survey Preview") and are dropped
+  by `code/01_deidentify_faculty.R`, leaving 26 real responses.
+- Three domains, each with a gateway question, task items, and an open-ended question:
+  research (`Q1`; tasks `Q2_1`-`Q2_18`; open `Q3`), teaching (`Q4`; `Q5_1`-`Q5_9`; `Q6`),
+  service (`Q7`; `Q8_1`-`Q8_5`; `Q9`). `Q10` is a final open-ended comment.
+- Gateway questions are **check-all-that-apply**: "Yes: LLM", "Yes: AI agent (Claude Code, Codex, Cursor)", "No".
+  Coded as No / LLM only / AI agent only / LLM and AI agent.
+- **Skip logic:** answering "No" skips that domain's task items, so task tables are among *users only*
+  (research 18, teaching 13 [12 answered items], service 6). Always state the denominator; say who is in it.
+- One respondent answered "No" to research AI use but wrote that they *build* AI tools in their research, so
+  "No" may mean "no LLM-style use" for some. Mention as a caveat.
+- Same privacy approach as the graduate survey (faculty are even more identifiable): redactions are applied from
+  `data/raw/redactions_faculty.csv` (local only). Scripts: `01_deidentify_faculty.R`, `02_describe_faculty.R`.
+  Do not commit faculty data/outputs/quotes until the user has approved the redactions.
+  Decisions: F25's Q3 is blanked entirely (identifies a research program; rule `<<ALL>>`). F7 is kept but quote
+  only short excerpts, never the tool-comparison, data-sensitivity, or idea-theft details. Never quote F22's sabbatical/return details.
+
 ## Data and privacy
 - GitHub repo is **PUBLIC** (github.com/sbauldry/ai-use). User approved pushing data, code, and outputs.
 - The survey is described to respondents as *anonymous*, yet the raw Qualtrics export has IP
